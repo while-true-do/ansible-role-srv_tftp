@@ -1,0 +1,43 @@
+---
+# defaults file for while_true_do.srv_tftp
+
+## Package Management
+wtd_srv_tftp_package: "tftp-server"
+# State can be present|latest|absent
+wtd_srv_tftp_package_state: "present"
+
+## Management for tftpboot
+# tftp is most likely used for pxe, bootp
+# enabled can be true|false
+wtd_srv_tftp_boot_enabled: true
+
+# Packages for tftpboot
+wtd_srv_tftp_boot_package: "syslinux-tftpboot"
+# State can be present|latest|absent
+wtd_srv_tftp_boot_package_state: "present"
+
+# Configuration for tftpboot
+wtd_srv_tftp_boot_conf:
+  timeout: "300"
+  title: "PXE Boot"
+  label_reboot: true
+  label_poweroff: true
+  labels: []
+  #   - label: ""
+  #     default: false
+  #     kernel: ""
+  #     append: ""
+
+## Service Management
+wtd_srv_tftp_service: "tftp.socket"
+# State can be started|stopped
+wtd_srv_tftp_service_state: "started"
+wtd_srv_tftp_service_enabled: true
+
+## Firewalld Management
+wtd_srv_tftp_fw_mgmt: true
+wtd_srv_tftp_fw_service: "tftp"
+# State can be enabled|disabled
+wtd_srv_tftp_fw_state: "enabled"
+# Zone can be according to defined zones on your machine.
+wtd_srv_tftp_fw_zone: "public"

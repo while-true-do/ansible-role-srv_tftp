@@ -1,0 +1,27 @@
+{{ ansible_managed | comment }}
+
+default vesamenu.c32
+timeout {{ wtd_srv_tftp_boot_conf.timeout | default('300') }}
+
+menu title "{{ wtd_srv_tftp_boot_conf.title | default('title') }}"
+
+{% for label in wtd_srv_tftp_boot_conf.labels %}
+label "{{ label.label }}"
+{% if label.default | default('false') | bool %}
+  menu default
+{% endif %}
+  menu label "{{ label.label }}"
+  kernel "{{ label.kernel }}"
+  append "{{ label.append }}"
+
+{% endfor %}
+{% if wtd_srv_tftp_boot_conf.label_reboot | default('true') | bool %}
+label "Reboot"
+  menu label "Reboot"
+  kernel reboot.c32
+{% endif %}
+{% if wtd_srv_tftp_boot_conf.label_poweroff | default('true') | bool %}
+label "Reboot"
+  menu label "Reboot"
+  kernel poweroff.c32
+{% endif %}

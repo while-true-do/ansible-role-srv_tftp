@@ -1,0 +1,61 @@
+---
+# tasks file for while_true_do.srv_tftp
+
+- name: Manage tftp Packages
+  package:
+    name: "{{ wtd_srv_tftp_package }}"
+    state: "{{ wtd_srv_tftp_package_state }}"
+  become: true
+  tags:
+    - tftp
+    - package
+    - server
+
+- name: Include tftp boot tasks
+  include_tasks: tftpboot.yml
+  tags:
+    - tftp
+    - boot
+    - configuration
+    - packages
+    - pxe
+    - server
+
+- name: Manage tftp Service
+  service:
+    name: "{{ wtd_srv_tftp_service }}"
+    state: "{{ wtd_srv_tftp_service_state }}"
+    enabled: "{{ wtd_srv_tftp_service_enabled }}"
+  become: true
+  when:
+    - wtd_srv_tftp_package_state != "absent"
+  tags:
+    - tftp
+    - service
+    - server
+
+- name: Gather package facts
+  package_facts:
+    manager: "auto"
+  tags:
+    - tftp
+    - facts
+    - firewall
+    - package
+    - security
+    - server
+
+- name: Manage tftp FW Service
+  firewalld:
+    service: "{{ wtd_srv_tftp_fw_service }}"
+    state: "{{ wtd_srv_tftp_fw_service_state }}"
+    zone: "{{ wtd_srv_tftp_fw_service_zone }}"
+  become: true
+  when:
+    - '"firewalld" in ansible_facts.packages'
+    - wtd_srv_tftp_fw_mgmt | bool
+  tags:
+    - tftp
+    - firewall
+    - security
+    - server

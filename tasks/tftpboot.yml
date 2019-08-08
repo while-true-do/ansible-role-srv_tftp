@@ -1,0 +1,69 @@
+---
+# tasks file for while_true_do.srv_tftp
+
+- name: Manage tftp boot Packages
+  package:
+    name: "{{ wtd_srv_tftp_boot_package }}"
+    state: "{{ wtd_srv_tftp_boot_package_state }}"
+  become: true
+  tags:
+    - tftp
+    - boot
+    - package
+    - pxe
+
+# Fedora currently puts the files in /tftpboot instead of /var/lib/tftpboot
+- name: Check tftp boot files (Fedora only)
+  stat:
+    path: "/var/lib/tftpboot/pxelinux.0"
+  register: tftpboot_file
+  when:
+    - ansible_distribution == "Fedora"
+  become: true
+  tags:
+    - tftp
+    - boot
+    - configuration
+    - package
+    - pxe
+
+- name: Copy tftp boot files (Fedora only)
+  command: "cp -ur /tftpboot/ /var/lib/"
+  when:
+    - ansible_distribution == "Fedora"
+    - not tftpboot_file.stat.exists
+  become: true
+  tags:
+    - tftp
+    - boot
+    - configuration
+    - package
+    - pxe
+
+- name: Manage tftp pxelinux.cfg Configuration
+  file:
+    path: "/var/lib/tftpboot/pxelinux.cfg"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: 0755
+  become: true
+  tags:
+    - tftp
+    - boot
+    - configuration
+    - pxe
+
+- name: Manage tftp pxelinux.cfg/default Configuration
+  template:
+    src: "default.j2"
+    dest: "/var/lib/tftpboot/pxelinux.cfg/default"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  become: true
+  tags:
+    - tftp
+    - boot
+    - configuration
+    - pxe
