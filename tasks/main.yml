@@ -48,8 +48,8 @@
 - name: Manage tftp FW Service
   firewalld:
     service: "{{ wtd_srv_tftp_fw_service }}"
-    state: "{{ wtd_srv_tftp_fw_service_state }}"
-    zone: "{{ wtd_srv_tftp_fw_service_zone }}"
+    state: "{{ wtd_srv_tftp_fw_state }}"
+    zone: "{{ wtd_srv_tftp_fw_zone }}"
   become: true
   when:
     - '"firewalld" in ansible_facts.packages'
