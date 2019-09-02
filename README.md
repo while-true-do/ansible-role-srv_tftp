@@ -135,18 +135,18 @@ the needed OS files on your own.
 ```
 - hosts: all
   roles:
-    - role: while_true_do.srv_tftp
-      wtd_srv_tftp_boot_conf:
-        timeout: "100"
-        title: "While True Do Boot"
-        labels:
-          - label: "CentOS 7"
-            default: true
-            kernel: "centos76/vmlinuz"
-            append: "initrd=centos76/initrd.img"
-          - label: "Fedora 30"
-            kernel: "fedora30/vmlinuz"
-            append: "initrd=fedora30/initrd.img"
+  - role: while_true_do.srv_tftp
+    wtd_srv_tftp_boot_conf:
+      timeout: "100"
+      title: "While True Do Boot"
+      labels:
+      - label: "CentOS 7.6"
+        default: true
+        kernel: "centos76/vmlinuz"
+        append: "initrd=centos76/initrd.img"
+      - label: "Fedora 30"
+        kernel: "fedora30/vmlinuz"
+        append: "initrd=fedora30/initrd.img"
 ```
 
 ## Known Issues
