@@ -7,21 +7,37 @@ menu title {{ wtd_srv_tftp_boot_conf.title | default('PXE Boot') }}
 
 {% for label in wtd_srv_tftp_boot_conf.labels %}
 label {{ label.label }}
-{% if label.default | default('false') | bool %}
+  {% if label.default | default('false') | bool %}
   menu default
-{% endif %}
+  {% endif %}
   menu label {{ label.label }}
   kernel {{ label.kernel }}
   append {{ label.append }}
 
 {% endfor %}
-{% if wtd_srv_tftp_boot_conf.label_reboot | default('true') | bool %}
+
+menu separator
+
+{% if wtd_srv_tftp_boot_conf.label_bootdisk | default('true') | bool %}
+label Boot from disk
+  menu label Boot from disk
+  localboot 0
+{% endif %}
+
+{% if wtd_srv_tftp_boot_conf.label_hdt | default('false') | bool %}
+label Hardware Detection Tool
+  menu label Hardware Detection Tool
+  kernel hdt.c32
+{% endif %}
+
+{% if wtd_srv_tftp_boot_conf.label_reboot | default('false') | bool %}
 label Reboot
   menu label Reboot
   kernel reboot.c32
 {% endif %}
-{% if wtd_srv_tftp_boot_conf.label_poweroff | default('true') | bool %}
+
+{% if wtd_srv_tftp_boot_conf.label_poweroff | default('false') | bool %}
 label Poweroff
   menu label Poweroff
-  kernel poweroff.c32
+  kernel poweroff.com
 {% endif %}

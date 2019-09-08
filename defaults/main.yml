@@ -20,13 +20,15 @@ wtd_srv_tftp_boot_package_state: "present"
 wtd_srv_tftp_boot_conf:
   timeout: "300"
   title: "PXE Boot"
-  label_reboot: true
-  label_poweroff: true
+  label_bootdisk: true
+  label_hdt: false
+  label_reboot: false
+  label_poweroff: false
   labels: []
-  #   - label: ""
-  #     default: false
-  #     kernel: ""
-  #     append: ""
+  # - label: ""
+  #   default: false
+  #   kernel: ""
+  #   append: ""
 
 ## Service Management
 wtd_srv_tftp_service: "tftp.socket"

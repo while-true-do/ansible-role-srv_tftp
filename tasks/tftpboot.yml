@@ -17,9 +17,9 @@
   stat:
     path: "/var/lib/tftpboot/pxelinux.0"
   register: tftpboot_file
+  become: true
   when:
     - ansible_distribution == "Fedora"
-  become: true
   tags:
     - tftp
     - boot
@@ -29,10 +29,10 @@
 
 - name: Copy tftp boot files (Fedora only)
   command: "cp -ur /tftpboot/ /var/lib/"
+  become: true
   when:
     - ansible_distribution == "Fedora"
     - not tftpboot_file.stat.exists
-  become: true
   tags:
     - tftp
     - boot
